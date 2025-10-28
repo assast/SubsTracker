@@ -86,7 +86,7 @@ function isExpired(targetTime, timezone = 'UTC') {
 function formatTimeInTimezone(time, timezone = 'UTC', format = 'full') {
   try {
     const date = new Date(time);
-    
+
     if (format === 'date') {
       return date.toLocaleDateString('zh-CN', {
         timeZone: timezone,
@@ -133,7 +133,7 @@ function formatTimezoneDisplay(timezone = 'UTC') {
   try {
     const offset = getTimezoneOffset(timezone);
     const offsetStr = offset >= 0 ? `+${offset}` : `${offset}`;
-    
+
     // 时区中文名称映射
     const timezoneNames = {
       'UTC': '世界标准时间',
@@ -155,7 +155,7 @@ function formatTimezoneDisplay(timezone = 'UTC') {
       'Australia/Melbourne': '墨尔本时间',
       'Pacific/Auckland': '奥克兰时间'
     };
-    
+
     const timezoneName = timezoneNames[timezone] || timezone;
     return `${timezoneName} (UTC${offsetStr})`;
   } catch (error) {
@@ -174,17 +174,17 @@ function extractTimezone(request) {
   // 优先级：URL参数 > 请求头 > 默认值
   const url = new URL(request.url);
   const timezoneParam = url.searchParams.get('timezone');
-  
+
   if (timezoneParam) {
     return timezoneParam;
   }
-  
+
   // 从请求头获取时区
   const timezoneHeader = request.headers.get('X-Timezone');
   if (timezoneHeader) {
     return timezoneHeader;
   }
-  
+
   // 从Accept-Language头推断时区（简化处理）
   const acceptLanguage = request.headers.get('Accept-Language');
   if (acceptLanguage) {
@@ -197,7 +197,7 @@ function extractTimezone(request) {
       return 'Europe/London';
     }
   }
-  
+
   // 默认返回UTC
   return 'UTC';
 }
@@ -464,7 +464,7 @@ const loginPage = `
       <h1 class="text-2xl font-bold text-gray-800"><i class="fas fa-calendar-check mr-2"></i>订阅管理系统</h1>
       <p class="text-gray-600 mt-2">登录管理您的订阅提醒</p>
     </div>
-    
+
     <form id="loginForm" class="space-y-6">
       <div>
         <label for="username" class="block text-sm font-medium text-gray-700 mb-1">
@@ -473,7 +473,7 @@ const loginPage = `
         <input type="text" id="username" name="username" required
           class="input-field w-full px-4 py-3 rounded-lg text-gray-700 focus:outline-none">
       </div>
-      
+
       <div>
         <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
           <i class="fas fa-lock mr-2"></i>密码
@@ -481,36 +481,36 @@ const loginPage = `
         <input type="password" id="password" name="password" required
           class="input-field w-full px-4 py-3 rounded-lg text-gray-700 focus:outline-none">
       </div>
-      
-      <button type="submit" 
+
+      <button type="submit"
         class="btn-primary w-full py-3 rounded-lg text-white font-medium focus:outline-none">
         <i class="fas fa-sign-in-alt mr-2"></i>登录
       </button>
-      
+
       <div id="errorMsg" class="text-red-500 text-center"></div>
     </form>
   </div>
-  
+
   <script>
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
-      
+
       const button = e.target.querySelector('button');
       const originalContent = button.innerHTML;
       button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>登录中...';
       button.disabled = true;
-      
+
       try {
         const response = await fetch('/api/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password })
         });
-        
+
         const result = await response.json();
-        
+
         if (result.success) {
           window.location.href = '/admin';
         } else {
@@ -681,14 +681,14 @@ const adminPage = `
     .hidden {
       display: none !important;
     }
-    
+
     .custom-date-picker {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
       border-radius: 12px;
       min-width: 380px;
     }
-    
+
     .custom-date-picker .calendar-day {
       display: flex;
       flex-direction: column;
@@ -703,30 +703,30 @@ const adminPage = `
       padding: 4px;
       font-size: 14px;
     }
-    
+
     .custom-date-picker .calendar-day:hover {
       background-color: #e0e7ff;
       transform: scale(1.05);
     }
-    
+
     .custom-date-picker .calendar-day.selected {
       background-color: #6366f1;
       color: white;
       transform: scale(1.1);
       box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
     }
-    
+
     .custom-date-picker .calendar-day.today {
       background-color: #e0e7ff;
       color: #6366f1;
       font-weight: 600;
       border: 2px solid #6366f1;
     }
-    
+
     .custom-date-picker .calendar-day.other-month {
       color: #d1d5db;
     }
-    
+
     .custom-date-picker .calendar-day .lunar-text {
       font-size: 11px;
       line-height: 1.2;
@@ -735,33 +735,33 @@ const adminPage = `
       text-align: center;
       font-weight: 500;
     }
-    
+
     .custom-date-picker .calendar-day.selected .lunar-text {
       color: rgba(255, 255, 255, 0.9);
     }
-    
+
     .custom-date-picker .calendar-day.today .lunar-text {
       color: #6366f1;
     }
-    
+
     /* 月份和年份选择器样式 */
     .month-option, .year-option {
       transition: all 0.2s ease;
       border: 1px solid transparent;
     }
-    
+
     .month-option:hover, .year-option:hover {
       background-color: #e0e7ff !important;
       border-color: #6366f1;
       color: #6366f1;
     }
-    
+
     .month-option.selected, .year-option.selected {
       background-color: #6366f1 !important;
       color: white;
       border-color: #6366f1;
     }
-    
+
     .lunar-toggle {
       display: inline-flex;
       align-items: center;
@@ -809,7 +809,7 @@ const adminPage = `
       .responsive-table td:last-of-type { border-bottom: none; }
       .responsive-table td:before { content: attr(data-label); font-weight: 600; text-align: left; padding-right: 1rem; color: #374151; white-space: nowrap; }
       .action-buttons-wrapper { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: flex-end; }
-      
+
       .notes-container, .hover-container {
         max-width: 180px; /* Adjust for new layout */
         text-align: right;
@@ -868,7 +868,7 @@ const adminPage = `
       </div>
     </div>
   </nav>
-  
+
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
       <div>
@@ -894,13 +894,20 @@ const adminPage = `
           <input type="checkbox" id="listShowLunar" class="form-checkbox h-4 w-4 text-indigo-600 shrink-0">
           <span class="text-gray-700">显示农历</span>
         </label>
+        <button id="importBtn" class="btn-warning text-white px-4 py-2 rounded-md text-sm font-medium flex items-center shrink-0">
+          <i class="fas fa-upload mr-2"></i>导入
+        </button>
+        <input type="file" id="importFile" accept=".json" class="hidden">
+        <button id="exportBtn" class="btn-info text-white px-4 py-2 rounded-md text-sm font-medium flex items-center shrink-0">
+          <i class="fas fa-download mr-2"></i>导出
+        </button>
         <button id="addSubscriptionBtn" class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium flex items-center shrink-0">
           <i class="fas fa-plus mr-2"></i>添加新订阅
         </button>
       </div>
       </div>
     </div>
-    
+
     <div class="table-container bg-white rounded-lg overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full divide-y divide-gray-200 responsive-table">
@@ -944,18 +951,18 @@ const adminPage = `
           </button>
         </div>
       </div>
-      
+
       <form id="subscriptionForm" class="p-6 space-y-6">
         <input type="hidden" id="subscriptionId">
-        
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label for="name" class="block text-sm font-medium text-gray-700 mb-1">订阅名称 *</label>
             <input type="text" id="name" required
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-            <div class="error-message text-red-500" data-for="reminderValue"></div>
+            <div class="error-message text-red-500" data-for="name"></div>
           </div>
-          
+
           <div>
             <label for="customType" class="block text-sm font-medium text-gray-700 mb-1">订阅类型</label>
             <input type="text" id="customType" placeholder="例如：流媒体、云服务、软件、生日等"
@@ -971,7 +978,7 @@ const adminPage = `
             <div class="error-message text-red-500"></div>
           </div>
         </div>
-        
+
         <div class="mb-4 flex items-center space-x-6">
           <label class="lunar-toggle">
             <input type="checkbox" id="showLunar" class="form-checkbox h-4 w-4 text-indigo-600">
@@ -1007,7 +1014,7 @@ const adminPage = `
                       <i class="fas fa-chevron-right"></i>
                     </button>
                   </div>
-                  
+
                   <!-- 月份选择器 -->
                   <div id="startDateMonthPicker" class="hidden mb-4">
                     <div class="flex justify-between items-center mb-3">
@@ -1031,7 +1038,7 @@ const adminPage = `
                       <button type="button" class="month-option px-3 py-2 text-sm rounded hover:bg-gray-100" data-month="11">12月</button>
                     </div>
                   </div>
-                  
+
                   <!-- 年份选择器 -->
                   <div id="startDateYearPicker" class="hidden mb-4">
                     <div class="flex justify-between items-center mb-3">
@@ -1053,7 +1060,7 @@ const adminPage = `
                       <!-- 年份按钮将通过JavaScript动态生成 -->
                     </div>
                   </div>
-                  
+
                   <div class="grid grid-cols-7 gap-2 mb-3">
                     <div class="text-center text-sm font-semibold text-gray-600 py-2">日</div>
                     <div class="text-center text-sm font-semibold text-gray-600 py-2">一</div>
@@ -1064,7 +1071,7 @@ const adminPage = `
                     <div class="text-center text-sm font-semibold text-gray-600 py-2">六</div>
                   </div>
                   <div id="startDateCalendar" class="grid grid-cols-7 gap-2"></div>
-                  
+
                   <!-- 回到今天按钮 -->
                   <div class="mt-4 pt-3 border-t border-gray-200">
                     <button type="button" id="startDateGoToToday" class="w-full px-3 py-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded-md">
@@ -1076,14 +1083,14 @@ const adminPage = `
             <div id="startDateLunar" class="lunar-display"></div>
             <div class="error-message text-red-500"></div>
           </div>
-          
+
           <div>
             <label for="periodValue" class="block text-sm font-medium text-gray-700 mb-1">周期数值 *</label>
             <input type="number" id="periodValue" min="1" value="1" required
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
             <div class="error-message text-red-500"></div>
           </div>
-          
+
           <div>
             <label for="periodUnit" class="block text-sm font-medium text-gray-700 mb-1">周期单位 *</label>
             <select id="periodUnit" required
@@ -1095,7 +1102,7 @@ const adminPage = `
             <div class="error-message text-red-500"></div>
           </div>
         </div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label for="expiryDate" class="block text-sm font-medium text-gray-700 mb-1">到期日期 *</label>
@@ -1120,7 +1127,7 @@ const adminPage = `
                     <i class="fas fa-chevron-right"></i>
                   </button>
                 </div>
-                
+
                 <!-- 月份选择器 -->
                 <div id="expiryDateMonthPicker" class="hidden mb-4">
                   <div class="flex justify-between items-center mb-3">
@@ -1144,7 +1151,7 @@ const adminPage = `
                     <button type="button" class="month-option px-3 py-2 text-sm rounded hover:bg-gray-100" data-month="11">12月</button>
                   </div>
                 </div>
-                
+
                 <!-- 年份选择器 -->
                 <div id="expiryDateYearPicker" class="hidden mb-4">
                   <div class="flex justify-between items-center mb-3">
@@ -1166,7 +1173,7 @@ const adminPage = `
                     <!-- 年份按钮将通过JavaScript动态生成 -->
                   </div>
                 </div>
-                
+
                 <div class="grid grid-cols-7 gap-2 mb-3">
                   <div class="text-center text-sm font-semibold text-gray-600 py-2">日</div>
                   <div class="text-center text-sm font-semibold text-gray-600 py-2">一</div>
@@ -1177,7 +1184,7 @@ const adminPage = `
                   <div class="text-center text-sm font-semibold text-gray-600 py-2">六</div>
                 </div>
                 <div id="expiryDateCalendar" class="grid grid-cols-7 gap-2"></div>
-                
+
                 <!-- 回到今天按钮 -->
                 <div class="mt-4 pt-3 border-t border-gray-200">
                   <button type="button" id="expiryDateGoToToday" class="w-full px-3 py-2 text-sm text-indigo-600 hover:bg-indigo-50 rounded-md">
@@ -1189,19 +1196,19 @@ const adminPage = `
             <div id="expiryDateLunar" class="lunar-display"></div>
             <div class="error-message text-red-500"></div>
             <div class="flex justify-end mt-2">
-              <button type="button" id="calculateExpiryBtn" 
+              <button type="button" id="calculateExpiryBtn"
                 class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap">
                 <i class="fas fa-calculator mr-2"></i>自动计算到期日期
               </button>
             </div>
           </div>
         </div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label for="reminderValue" class="block text-sm font-medium text-gray-700 mb-1">提醒提前量</label>
+            <label for="reminderValues" class="block text-sm font-medium text-gray-700 mb-1">提醒提前量</label>
             <div class="flex space-x-3">
-              <input type="number" id="reminderValue" min="0" value="7"
+              <input type="text" id="reminderValues" value="7,0" placeholder="用逗号分隔, 如 7,3,0"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
               <select id="reminderUnit"
                 class="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 bg-white">
@@ -1209,40 +1216,40 @@ const adminPage = `
                 <option value="hour">小时</option>
               </select>
             </div>
-            <p class="text-xs text-gray-500 mt-1">0 = 仅在到期时提醒；选择“小时”需要将 Worker 定时任务调整为小时级执行</p>
-            <div class="error-message text-red-500"></div>
+            <p class="text-xs text-gray-500 mt-1">可设置多个提醒, 用逗号分隔。0 = 到期当天提醒。</p>
+            <div class="error-message text-red-500" data-for="reminderValues"></div>
           </div>
-          
+
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-3">选项设置</label>
             <div class="space-y-2">
               <label class="inline-flex items-center">
-                <input type="checkbox" id="isActive" checked 
+                <input type="checkbox" id="isActive" checked
                   class="form-checkbox h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
                 <span class="ml-2 text-sm text-gray-700">启用订阅</span>
               </label>
               <label class="inline-flex items-center">
-                <input type="checkbox" id="autoRenew" checked 
+                <input type="checkbox" id="autoRenew" checked
                   class="form-checkbox h-4 w-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500">
                 <span class="ml-2 text-sm text-gray-700">自动续订</span>
               </label>
             </div>
           </div>
         </div>
-        
+
         <div>
           <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">备注</label>
           <textarea id="notes" rows="3" placeholder="可添加相关备注信息..."
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
           <div class="error-message text-red-500"></div>
         </div>
-        
+
         <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
-          <button type="button" id="cancelBtn" 
+          <button type="button" id="cancelBtn"
             class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
             取消
           </button>
-          <button type="submit" 
+          <button type="submit"
             class="btn-primary text-white px-4 py-2 rounded-md text-sm font-medium">
             <i class="fas fa-save mr-2"></i>保存
           </button>
@@ -1257,7 +1264,7 @@ const adminPage = `
       try {
         const timezone = 'Asia/Shanghai';
         const dateObj = new Date(date);
-        
+
         if (format === 'date') {
           return dateObj.toLocaleDateString('zh-CN', {
             timeZone: timezone,
@@ -1422,7 +1429,7 @@ const adminPage = `
         };
       }
     };
-	
+
 
 // 新增修改，农历转公历（简化，适用1900-2100年）
 function lunar2solar(lunar) {
@@ -1539,7 +1546,7 @@ const lunarBiz = {
       if (!showLunar) {
         return;
       }
-      
+
       updateLunarDisplay('startDate', 'startDateLunar');
       updateLunarDisplay('expiryDate', 'expiryDateLunar');
 
@@ -1552,7 +1559,7 @@ const lunarBiz = {
       if (!showLunar) {
         return;
       }
-      
+
       const saved = localStorage.getItem('showLunar');
       if (saved !== null) {
         showLunar.checked = saved === 'true';
@@ -1574,13 +1581,13 @@ const lunarBiz = {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
       toast.className = 'toast ' + type;
-      
+
       const icon = type === 'success' ? 'check-circle' :
                    type === 'error' ? 'exclamation-circle' :
                    type === 'warning' ? 'exclamation-triangle' : 'info-circle';
-      
+
       toast.innerHTML = '<div class="flex items-center"><i class="fas fa-' + icon + ' mr-2"></i><span>' + message + '</span></div>';
-      
+
       container.appendChild(toast);
       setTimeout(() => toast.classList.add('show'), 100);
       setTimeout(() => {
@@ -1638,11 +1645,20 @@ const lunarBiz = {
         isValid = false;
       }
 
-      const reminderValueField = document.getElementById('reminderValue');
-      const reminderValue = reminderValueField.value;
-      if (reminderValue === '' || Number(reminderValue) < 0) {
-        showFieldError('reminderValue', '提醒值不能为负数');
+      const reminderValuesField = document.getElementById('reminderValues');
+      const reminderValuesStr = reminderValuesField.value.trim();
+      if (!reminderValuesStr) {
+        showFieldError('reminderValues', '请输入提醒提前量');
         isValid = false;
+      } else {
+        const reminderValues = reminderValuesStr.split(',').map(v => v.trim()).filter(v => v !== '');
+        if (reminderValues.length === 0 || reminderValues.some(v => {
+          const num = Number(v);
+          return isNaN(num) || !Number.isInteger(num) || num < 0;
+        })) {
+          showFieldError('reminderValues', '提醒值必须是逗号分隔的非负整数');
+          isValid = false;
+        }
       }
 
       return isValid;
@@ -1710,28 +1726,21 @@ const lunarBiz = {
     }
 
     function getReminderSettings(subscription) {
-      const fallbackDays = subscription.reminderDays !== undefined ? subscription.reminderDays : 7;
-      let unit = subscription.reminderUnit || '';
-      let value = subscription.reminderValue;
+      const reminderValues = Array.isArray(subscription.reminderValues) && subscription.reminderValues.length > 0
+        ? subscription.reminderValues
+        : (subscription.reminderValue !== undefined ? [Number(subscription.reminderValue)] : (subscription.reminderDays !== undefined ? [Number(subscription.reminderDays)] : [7, 0]));
 
+      let unit = subscription.reminderUnit || 'day';
       if (unit !== 'hour') {
         unit = 'day';
       }
 
-      if (unit === 'hour' && (value === undefined || value === null || isNaN(value))) {
-        value = subscription.reminderHours !== undefined ? subscription.reminderHours : 0;
-      }
-
-      if (value === undefined || value === null || isNaN(value)) {
-        value = fallbackDays;
-      }
-
-      value = Number(value);
+      const values = [...new Set(reminderValues)].sort((a, b) => b - a); // sort descending and unique
 
       return {
         unit,
-        value,
-        displayText: unit === 'hour' ? '提前' + value + '小时' : '提前' + value + '天'
+        values,
+        displayText: '提前' + values.join(', ') + (unit === 'hour' ? '小时' : '天')
       };
     }
 
@@ -1885,9 +1894,10 @@ const lunarBiz = {
         const diffHours = diffMs / (1000 * 60 * 60);
 
         const reminder = getReminderSettings(subscription);
+        const maxReminder = reminder.values.length > 0 ? Math.max(...reminder.values) : 0;
         const isSoon = reminder.unit === 'hour'
-          ? diffHours >= 0 && diffHours <= reminder.value
-          : daysDiff >= 0 && daysDiff <= reminder.value;
+          ? diffHours >= 0 && diffHours <= maxReminder
+          : daysDiff >= 0 && daysDiff <= maxReminder;
 
         let statusHtml = '';
         if (!subscription.isActive) {
@@ -1984,8 +1994,8 @@ const lunarBiz = {
           : '';
         const startDateHtml = startDateText ? createHoverText(startDateText, 30, 'text-xs text-gray-500 mt-1') : '';
 
-        const reminderExtra = reminder.value === 0
-          ? '<div class="text-xs text-gray-500 mt-1">仅到期时提醒</div>'
+        const reminderExtra = reminder.values.includes(0)
+          ? '<div class="text-xs text-gray-500 mt-1">包含到期当天提醒</div>'
           : (reminder.unit === 'hour' ? '<div class="text-xs text-gray-500 mt-1">小时级提醒</div>' : '');
         const reminderHtml = '<div><i class="fas fa-bell mr-1"></i>' + reminder.displayText + '</div>' + reminderExtra;
 
@@ -2092,7 +2102,7 @@ const lunarBiz = {
         showToast('加载订阅列表失败', 'error');
       }
     }
-    
+
     async function testSubscriptionNotification(e) {
         const button = e.target.tagName === 'BUTTON' ? e.target : e.target.parentElement;
         const id = button.dataset.id;
@@ -2116,24 +2126,24 @@ const lunarBiz = {
             button.disabled = false;
         }
     }
-    
+
     async function toggleSubscriptionStatus(e) {
       const id = e.target.dataset.id || e.target.parentElement.dataset.id;
       const action = e.target.dataset.action || e.target.parentElement.dataset.action;
       const isActivate = action === 'activate';
-      
+
       const button = e.target.tagName === 'BUTTON' ? e.target : e.target.parentElement;
       const originalContent = button.innerHTML;
       button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>' + (isActivate ? '启用中...' : '停用中...');
       button.disabled = true;
-      
+
       try {
         const response = await fetch('/api/subscriptions/' + id + '/toggle-status', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ isActive: isActivate })
         });
-        
+
         if (response.ok) {
           showToast((isActivate ? '启用' : '停用') + '成功', 'success');
           loadSubscriptions();
@@ -2150,7 +2160,7 @@ const lunarBiz = {
         button.disabled = false;
       }
     }
-    
+
     document.getElementById('addSubscriptionBtn').addEventListener('click', () => {
       document.getElementById('modalTitle').textContent = '添加新订阅';
       document.getElementById('subscriptionModal').classList.remove('hidden');
@@ -2162,7 +2172,7 @@ const lunarBiz = {
       const today = new Date().toISOString().split('T')[0]; // 前端使用本地时间
       document.getElementById('startDate').value = today;
       document.getElementById('category').value = '';
-      document.getElementById('reminderValue').value = '7';
+      document.getElementById('reminderValues').value = '7,0';
       document.getElementById('reminderUnit').value = 'day';
       document.getElementById('isActive').checked = true;
       document.getElementById('autoRenew').checked = true;
@@ -2176,7 +2186,7 @@ const lunarBiz = {
     class CustomDatePicker {
       constructor(inputId, pickerId, calendarId, monthId, yearId, prevBtnId, nextBtnId) {
         console.log('CustomDatePicker 构造函数:', { inputId, pickerId, calendarId, monthId, yearId, prevBtnId, nextBtnId });
-        
+
         this.input = document.getElementById(inputId);
         this.picker = document.getElementById(pickerId);
         this.calendar = document.getElementById(calendarId);
@@ -2184,7 +2194,7 @@ const lunarBiz = {
         this.yearElement = document.getElementById(yearId);
         this.prevBtn = document.getElementById(prevBtnId);
         this.nextBtn = document.getElementById(nextBtnId);
-        
+
         // 新增元素
         this.monthPicker = document.getElementById(pickerId.replace('Picker', 'MonthPicker'));
         this.yearPicker = document.getElementById(pickerId.replace('Picker', 'YearPicker'));
@@ -2195,7 +2205,7 @@ const lunarBiz = {
         this.nextYearDecadeBtn = document.getElementById(pickerId.replace('Picker', 'NextYearDecade'));
         this.yearRangeElement = document.getElementById(pickerId.replace('Picker', 'YearRange'));
         this.yearGrid = document.getElementById(pickerId.replace('Picker', 'YearGrid'));
-        
+
         console.log('找到的元素:', {
           input: !!this.input,
           picker: !!this.picker,
@@ -2205,18 +2215,18 @@ const lunarBiz = {
           prevBtn: !!this.prevBtn,
           nextBtn: !!this.nextBtn
         });
-        
+
         this.currentDate = new Date();
         this.selectedDate = null;
         this.currentView = 'calendar'; // 'calendar', 'month', 'year'
         this.yearDecade = Math.floor(this.currentDate.getFullYear() / 10) * 10;
-        
+
         this.init();
       }
-      
+
       init() {
         console.log('初始化日期选择器，输入框:', !!this.input, '选择器:', !!this.picker);
-        
+
         // 绑定基本事件
         if (this.input) {
           // 移除之前的事件监听器（如果存在）
@@ -2240,32 +2250,32 @@ const lunarBiz = {
           };
           this.input.addEventListener('keydown', this._manualKeydownHandler);
         }
-        
+
         if (this.prevBtn) {
           this.prevBtn.removeEventListener('click', this._prevHandler);
           this._prevHandler = () => this.previousMonth();
           this.prevBtn.addEventListener('click', this._prevHandler);
         }
-        
+
         if (this.nextBtn) {
           this.nextBtn.removeEventListener('click', this._nextHandler);
           this._nextHandler = () => this.nextMonth();
           this.nextBtn.addEventListener('click', this._nextHandler);
         }
-        
+
         // 绑定月份和年份点击事件
         if (this.monthElement) {
           this.monthElement.removeEventListener('click', this._showMonthHandler);
           this._showMonthHandler = () => this.showMonthPicker();
           this.monthElement.addEventListener('click', this._showMonthHandler);
         }
-        
+
         if (this.yearElement) {
           this.yearElement.removeEventListener('click', this._showYearHandler);
           this._showYearHandler = () => this.showYearPicker();
           this.yearElement.addEventListener('click', this._showYearHandler);
         }
-        
+
         // 绑定月份选择器事件
         if (this.monthPicker) {
           this.monthPicker.removeEventListener('click', this._monthSelectHandler);
@@ -2277,19 +2287,19 @@ const lunarBiz = {
           };
           this.monthPicker.addEventListener('click', this._monthSelectHandler);
         }
-        
+
         if (this.backToCalendarBtn) {
           this.backToCalendarBtn.removeEventListener('click', this._backToCalendarHandler);
           this._backToCalendarHandler = () => this.showCalendar();
           this.backToCalendarBtn.addEventListener('click', this._backToCalendarHandler);
         }
-        
+
         if (this.backToCalendarFromYearBtn) {
           this.backToCalendarFromYearBtn.removeEventListener('click', this._backToCalendarFromYearHandler);
           this._backToCalendarFromYearHandler = () => this.showCalendar();
           this.backToCalendarFromYearBtn.addEventListener('click', this._backToCalendarFromYearHandler);
         }
-        
+
         // 绑定年份选择器事件
         if (this.prevYearDecadeBtn) {
         this.prevYearDecadeBtn.removeEventListener('click', this._prevYearDecadeHandler);
@@ -2308,14 +2318,14 @@ const lunarBiz = {
         };
         this.nextYearDecadeBtn.addEventListener('click', this._nextYearDecadeHandler);
 }
-        
+
         // 绑定回到今天事件
         if (this.goToTodayBtn) {
           this.goToTodayBtn.removeEventListener('click', this._goToTodayHandler);
           this._goToTodayHandler = () => this.goToToday();
           this.goToTodayBtn.addEventListener('click', this._goToTodayHandler);
         }
-        
+
         // 点击外部关闭
         if (this._outsideClickHandler) {
           document.removeEventListener('click', this._outsideClickHandler);
@@ -2327,19 +2337,19 @@ const lunarBiz = {
           }
         };
         document.addEventListener('click', this._outsideClickHandler);
-        
+
         // 初始化显示
         this.syncFromInputValue();
         this.render();
         this.renderYearGrid();
       }
-      
+
       toggle() {
         console.log('toggle 被调用');
         console.log('picker 元素:', this.picker);
         console.log('picker 类名:', this.picker ? this.picker.className : 'null');
         console.log('是否包含 hidden:', this.picker ? this.picker.classList.contains('hidden') : 'null');
-        
+
         if (this.picker && this.picker.classList.contains('hidden')) {
           console.log('显示日期选择器');
           this.show();
@@ -2348,7 +2358,7 @@ const lunarBiz = {
           this.hide();
         }
       }
-      
+
       // 强制显示日期选择器
       forceShow() {
         console.log('forceShow 被调用');
@@ -2364,30 +2374,30 @@ const lunarBiz = {
           console.error('日期选择器元素不存在');
         }
       }
-      
+
       show() {
         if (this.picker) {
           this.picker.classList.remove('hidden');
           this.render();
         }
       }
-      
+
       hide() {
         if (this.picker) {
           this.picker.classList.add('hidden');
         }
       }
-      
+
       previousMonth() {
         this.currentDate.setMonth(this.currentDate.getMonth() - 1);
         this.render();
       }
-      
+
       nextMonth() {
         this.currentDate.setMonth(this.currentDate.getMonth() + 1);
         this.render();
       }
-      
+
       selectDate(date) {
         this.selectedDate = date;
         if (this.input) {
@@ -2398,7 +2408,7 @@ const lunarBiz = {
           this.input.value = year + '-' + month + '-' + day;
         }
         this.hide();
-        
+
         // 触发change事件，但不冒泡到表单
         if (this.input) {
           const event = new Event('change', { bubbles: false });
@@ -2442,50 +2452,50 @@ const lunarBiz = {
         const event = new Event('change', { bubbles: false });
         this.input.dispatchEvent(event);
       }
-      
+
       render() {
         if (!this.monthElement || !this.yearElement || !this.calendar) return;
-        
+
         const year = this.currentDate.getFullYear();
         const month = this.currentDate.getMonth();
-        
+
         // 更新月份年份显示
         this.monthElement.textContent = (month + 1) + '月';
         this.yearElement.textContent = year;
-        
+
         // 清空日历
         this.calendar.innerHTML = '';
-        
+
         // 获取当月第一天和最后一天
         const firstDay = new Date(year, month, 1);
         const lastDay = new Date(year, month + 1, 0);
         const startDate = new Date(firstDay);
         startDate.setDate(startDate.getDate() - firstDay.getDay());
-        
+
         // 生成日历网格
         for (let i = 0; i < 42; i++) {
           const date = new Date(startDate);
           date.setDate(startDate.getDate() + i);
-          
+
           const dayElement = document.createElement('div');
           dayElement.className = 'calendar-day';
-          
+
           // 判断是否是当前月份
           if (date.getMonth() !== month) {
             dayElement.classList.add('other-month');
           }
-          
+
           // 判断是否是今天
           const today = new Date();
           if (date.toDateString() === today.toDateString()) {
             dayElement.classList.add('today');
           }
-          
+
           // 判断是否是选中日期
           if (this.selectedDate && date.toDateString() === this.selectedDate.toDateString()) {
             dayElement.classList.add('selected');
           }
-          
+
           // 获取农历信息
           let lunarText = '';
           try {
@@ -2502,17 +2512,17 @@ const lunarBiz = {
           } catch (error) {
             console.error('农历转换错误:', error);
           }
-          
+
           dayElement.innerHTML =
             '<div>' + date.getDate() + '</div>' +
             '<div class="lunar-text">' + lunarText + '</div>';
-          
+
           dayElement.addEventListener('click', () => this.selectDate(date));
-          
+
           this.calendar.appendChild(dayElement);
         }
       }
-      
+
       // 显示月份选择器
       showMonthPicker() {
         this.currentView = 'month';
@@ -2529,7 +2539,7 @@ const lunarBiz = {
           });
         }
       }
-      
+
       // 显示年份选择器
       showYearPicker() {
         this.currentView = 'year';
@@ -2539,58 +2549,58 @@ const lunarBiz = {
         }
         this.renderYearGrid();
       }
-      
+
       // 显示日历视图
       showCalendar() {
         this.currentView = 'calendar';
         this.hideAllViews();
         this.render();
       }
-      
+
       // 隐藏所有视图
       hideAllViews() {
         if (this.monthPicker) this.monthPicker.classList.add('hidden');
         if (this.yearPicker) this.yearPicker.classList.add('hidden');
         // 注意：不隐藏日历视图，因为它是主视图
       }
-      
+
       // 选择月份
       selectMonth(month) {
         this.currentDate.setMonth(month);
         this.showCalendar();
       }
-      
+
       // 选择年份
       selectYear(year) {
         this.currentDate.setFullYear(year);
         this.showCalendar();
       }
-      
+
       // 上一十年
       previousYearDecade() {
         this.yearDecade -= 10;
         this.renderYearGrid();
       }
-      
+
       // 下一十年
       nextYearDecade() {
         this.yearDecade += 10;
         this.renderYearGrid();
       }
-      
+
       // 渲染年份网格
       renderYearGrid() {
         if (!this.yearGrid || !this.yearRangeElement) return;
-        
+
         const startYear = this.yearDecade;
         const endYear = this.yearDecade + 9;
-        
+
         // 更新年份范围显示
         this.yearRangeElement.textContent = startYear + '-' + endYear;
-        
+
         // 清空年份网格
         this.yearGrid.innerHTML = '';
-        
+
         // 生成年份按钮
         for (let year = startYear; year <= endYear; year++) {
           const yearBtn = document.createElement('button');
@@ -2598,12 +2608,12 @@ const lunarBiz = {
           yearBtn.className = 'year-option px-3 py-2 text-sm rounded hover:bg-gray-100';
           yearBtn.textContent = year;
           yearBtn.dataset.year = year;
-          
+
           // 高亮当前年份
           if (year === this.currentDate.getFullYear()) {
             yearBtn.classList.add('bg-indigo-100', 'text-indigo-600');
           }
-          
+
           // 限制年份范围 1900-2100
           if (year < 1900 || year > 2100) {
             yearBtn.disabled = true;
@@ -2611,21 +2621,21 @@ const lunarBiz = {
           } else {
             yearBtn.addEventListener('click', () => this.selectYear(year));
           }
-          
+
           this.yearGrid.appendChild(yearBtn);
         }
       }
-      
+
       // 回到今天
       goToToday() {
         this.currentDate = new Date();
         this.yearDecade = Math.floor(this.currentDate.getFullYear() / 10) * 10;
         this.showCalendar();
       }
-      
+
       destroy() {
         this.hide();
-        
+
         // 清理事件监听器
         if (this.input && this._forceShowHandler) {
           this.input.removeEventListener('click', this._forceShowHandler);
@@ -2671,7 +2681,7 @@ const lunarBiz = {
         }
       }
     }
-    
+
     function setupModalEventListeners() {
       // 获取DOM元素
       const calculateExpiryBtn = document.getElementById('calculateExpiryBtn');
@@ -2680,7 +2690,7 @@ const lunarBiz = {
       const startDate = document.getElementById('startDate');
       const expiryDate = document.getElementById('expiryDate');
       const cancelBtn = document.getElementById('cancelBtn');
-      
+
       // 直接绑定事件监听器（简化处理，避免重复移除的问题）
       if (calculateExpiryBtn) {
         calculateExpiryBtn.addEventListener('click', calculateExpiryDate);
@@ -2719,25 +2729,25 @@ const lunarBiz = {
         if (window.expiryDatePicker && typeof window.expiryDatePicker.destroy === 'function') {
           window.expiryDatePicker.destroy();
         }
-        
+
         // 清理全局变量
         window.startDatePicker = null;
         window.expiryDatePicker = null;
-        
+
         // 确保DOM元素存在后再创建选择器
         setTimeout(() => {
           console.log('创建开始日期选择器...');
           window.startDatePicker = new CustomDatePicker(
-            'startDate', 'startDatePicker', 'startDateCalendar', 
+            'startDate', 'startDatePicker', 'startDateCalendar',
             'startDateMonth', 'startDateYear', 'startDatePrevMonth', 'startDateNextMonth'
           );
-          
+
           console.log('创建到期日期选择器...');
           window.expiryDatePicker = new CustomDatePicker(
-            'expiryDate', 'expiryDatePicker', 'expiryDateCalendar', 
+            'expiryDate', 'expiryDatePicker', 'expiryDateCalendar',
             'expiryDateMonth', 'expiryDateYear', 'expiryDatePrevMonth', 'expiryDateNextMonth'
           );
-          
+
           console.log('日期选择器初始化完成');
         }, 50);
       } catch (error) {
@@ -2748,7 +2758,7 @@ const lunarBiz = {
       }
     }
 
-	// 3. 新增修改， calculateExpiryDate 函数，支持农历周期推算     
+	// 3. 新增修改， calculateExpiryDate 函数，支持农历周期推算
 	function calculateExpiryDate() {
 	  const startDate = document.getElementById('startDate').value;
 	  const periodValue = parseInt(document.getElementById('periodValue').value);
@@ -2765,24 +2775,24 @@ const lunarBiz = {
 		const lunar = lunarCalendar.solar2lunar(start.getFullYear(), start.getMonth() + 1, start.getDate());
 		let nextLunar = addLunarPeriod(lunar, periodValue, periodUnit);
 		const solar = lunar2solar(nextLunar);
-		
-		// 使用与公历相同的方式创建日期  
-		const expiry = new Date(startDate); // 从原始日期开始  
-		expiry.setFullYear(solar.year);  
-		expiry.setMonth(solar.month - 1);  
-		expiry.setDate(solar.day);  
+
+		// 使用与公历相同的方式创建日期
+		const expiry = new Date(startDate); // 从原始日期开始
+		expiry.setFullYear(solar.year);
+		expiry.setMonth(solar.month - 1);
+		expiry.setDate(solar.day);
 		document.getElementById('expiryDate').value = expiry.toISOString().split('T')[0];
 		console.log('start:', start);
 		console.log('nextLunar:', nextLunar);
 		console.log('expiry:', expiry);
 		console.log('expiryDate:', document.getElementById('expiryDate').value);
-		
-		console.log('solar from lunar2solar:', solar);  
+
+		console.log('solar from lunar2solar:', solar);
 		console.log('solar.year:', solar.year, 'solar.month:', solar.month, 'solar.day:', solar.day);
-		console.log('expiry.getTime():', expiry.getTime());  
+		console.log('expiry.getTime():', expiry.getTime());
 		console.log('expiry.toString():', expiry.toString());
-		
-		
+
+
 	  } else {
 		// 公历推算
 		const start = new Date(startDate);
@@ -2804,32 +2814,37 @@ const lunarBiz = {
 	  updateLunarDisplay('startDate', 'startDateLunar');
 	  updateLunarDisplay('expiryDate', 'expiryDateLunar');
 	}
-    
+
     document.getElementById('closeModal').addEventListener('click', () => {
       document.getElementById('subscriptionModal').classList.add('hidden');
     });
-    
+
     // 禁止点击弹窗外区域关闭弹窗，防止误操作丢失内容
     // document.getElementById('subscriptionModal').addEventListener('click', (event) => {
     //   if (event.target === document.getElementById('subscriptionModal')) {
     //     document.getElementById('subscriptionModal').classList.add('hidden');
     //   }
     // });
-    
-	
+
+
 	// 4. 新增修改，监听 useLunar 复选框变化时也自动重新计算
-	// 注意：这个事件监听器已经在 setupModalEventListeners 中处理了   
+	// 注意：这个事件监听器已经在 setupModalEventListeners 中处理了
    // 新增修改，表单提交时带上 useLunar 字段
     document.getElementById('subscriptionForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       if (!validateForm()) {
         return;
       }
-      
+
       const id = document.getElementById('subscriptionId').value;
       const reminderUnit = document.getElementById('reminderUnit').value;
-      const reminderValue = Number(document.getElementById('reminderValue').value) || 0;
+      const reminderValuesStr = document.getElementById('reminderValues').value.trim();
+      const reminderValues = reminderValuesStr.split(',')
+            .map(v => v.trim())
+            .filter(v => v !== '')
+            .map(v => parseInt(v, 10))
+            .filter(v => !isNaN(v) && v >= 0);
 
       const subscription = {
         name: document.getElementById('name').value.trim(),
@@ -2843,29 +2858,27 @@ const lunarBiz = {
         periodValue: Number(document.getElementById('periodValue').value),
         periodUnit: document.getElementById('periodUnit').value,
         reminderUnit: reminderUnit,
-        reminderValue: reminderValue,
-        reminderDays: reminderUnit === 'day' ? reminderValue : 0,
-        reminderHours: reminderUnit === 'hour' ? reminderValue : undefined,
+        reminderValues: reminderValues.length > 0 ? [...new Set(reminderValues)] : [7, 0],
         useLunar: document.getElementById('useLunar').checked
       };
-      
+
       const submitButton = e.target.querySelector('button[type="submit"]');
       const originalContent = submitButton.innerHTML;
       submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>' + (id ? '更新中...' : '保存中...');
       submitButton.disabled = true;
-      
+
       try {
         const url = id ? '/api/subscriptions/' + id : '/api/subscriptions';
         const method = id ? 'PUT' : 'POST';
-        
+
         const response = await fetch(url, {
           method: method,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(subscription)
         });
-        
+
         const result = await response.json();
-        
+
         if (result.success) {
           showToast((id ? '更新' : '添加') + '订阅成功', 'success');
           document.getElementById('subscriptionModal').classList.add('hidden');
@@ -2881,15 +2894,15 @@ const lunarBiz = {
         submitButton.disabled = false;
       }
     });
-    
+
 	    // 新增修改，编辑订阅时回显 useLunar 字段
     async function editSubscription(e) {
       const id = e.target.dataset.id || e.target.parentElement.dataset.id;
-      
+
       try {
         const response = await fetch('/api/subscriptions/' + id);
         const subscription = await response.json();
-        
+
         if (subscription) {
           document.getElementById('modalTitle').textContent = '编辑订阅';
           document.getElementById('subscriptionId').value = subscription.id;
@@ -2903,33 +2916,15 @@ const lunarBiz = {
           document.getElementById('expiryDate').value = subscription.expiryDate ? subscription.expiryDate.split('T')[0] : '';
           document.getElementById('periodValue').value = subscription.periodValue || 1;
           document.getElementById('periodUnit').value = subscription.periodUnit || 'month';
-          const reminderUnit = subscription.reminderUnit || (subscription.reminderHours !== undefined ? 'hour' : 'day');
-          let reminderValue;
-          if (reminderUnit === 'hour') {
-            if (subscription.reminderValue !== undefined && subscription.reminderValue !== null) {
-              reminderValue = subscription.reminderValue;
-            } else if (subscription.reminderHours !== undefined) {
-              reminderValue = subscription.reminderHours;
-            } else {
-              reminderValue = 0;
-            }
-          } else {
-            if (subscription.reminderValue !== undefined && subscription.reminderValue !== null) {
-              reminderValue = subscription.reminderValue;
-            } else if (subscription.reminderDays !== undefined) {
-              reminderValue = subscription.reminderDays;
-            } else {
-              reminderValue = 7;
-            }
-          }
-          document.getElementById('reminderUnit').value = reminderUnit;
-          document.getElementById('reminderValue').value = reminderValue;
+          const reminder = getReminderSettings(subscription);
+          document.getElementById('reminderUnit').value = reminder.unit;
+          document.getElementById('reminderValues').value = reminder.values.join(',');
           document.getElementById('useLunar').checked = !!subscription.useLunar;
-          
+
           clearFieldErrors();
           loadLunarPreference();
           document.getElementById('subscriptionModal').classList.remove('hidden');
-          
+
           // 重要：编辑订阅时也需要重新设置事件监听器
           setupModalEventListeners();
 
@@ -2944,24 +2939,24 @@ const lunarBiz = {
         showToast('获取订阅信息失败', 'error');
       }
     }
-    
+
     async function deleteSubscription(e) {
       const id = e.target.dataset.id || e.target.parentElement.dataset.id;
-      
+
       if (!confirm('确定要删除这个订阅吗？此操作不可恢复。')) {
         return;
       }
-      
+
       const button = e.target.tagName === 'BUTTON' ? e.target : e.target.parentElement;
       const originalContent = button.innerHTML;
       button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>删除中...';
       button.disabled = true;
-      
+
       try {
         const response = await fetch('/api/subscriptions/' + id, {
           method: 'DELETE'
         });
-        
+
         if (response.ok) {
           showToast('删除成功', 'success');
           loadSubscriptions();
@@ -2978,10 +2973,10 @@ const lunarBiz = {
         button.disabled = false;
       }
     }
-    
+
     // 全局时区配置
     let globalTimezone = 'UTC';
-    
+
     // 检测时区更新
     function checkTimezoneUpdate() {
       const lastUpdate = localStorage.getItem('timezoneUpdated');
@@ -2995,24 +2990,101 @@ const lunarBiz = {
         }
       }
     }
-    
+
     // 页面加载时检查时区更新
     window.addEventListener('load', () => {
       checkTimezoneUpdate();
       loadSubscriptions();
     });
-    
+
     // 定期检查时区更新（每2秒检查一次）
-    setInterval(checkTimezoneUpdate, 2000);
+    const importBtn = document.getElementById('importBtn');
+    if (importBtn) {
+        const importFile = document.getElementById('importFile');
+
+        importBtn.addEventListener('click', () => {
+          importFile.click();
+        });
+
+        importFile.addEventListener('change', (event) => {
+          const file = event.target.files[0];
+          if (!file) {
+            return;
+          }
+
+          const reader = new FileReader();
+          reader.onload = async (e) => {
+            if (!confirm('您确定要导入这些订阅吗？这将覆盖具有相同ID的现有订阅。')) {
+              importFile.value = '';
+              return;
+            }
+            try {
+              const subscriptionsToImport = JSON.parse(e.target.result);
+              if (!Array.isArray(subscriptionsToImport)) {
+                throw new Error('无效的文件格式');
+              }
+
+              const response = await fetch('/api/import', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(subscriptionsToImport)
+              });
+
+              const result = await response.json();
+              if (result.success) {
+                showToast("成功导入" + result.importedCount + "条订阅", 'success');
+                loadSubscriptions(); // Refresh the list
+              } else {
+                showToast(result.message || '导入失败', 'error');
+              }
+
+            } catch (error) {
+              showToast('导入失败: ' + error.message, 'error');
+            } finally {
+              importFile.value = '';
+            }
+          };
+          reader.readAsText(file);
+        });
+    }
+
+    const exportBtn = document.getElementById('exportBtn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', async () => {
+          try {
+            const response = await fetch('/api/subscriptions');
+            const subscriptions = await response.json();
+
+            if (subscriptions) {
+              const dataStr = JSON.stringify(subscriptions, null, 2);
+              const dataBlob = new Blob([dataStr], {type: 'application/json'});
+              const url = URL.createObjectURL(dataBlob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = "subscriptions-backup-"+ new Date().toISOString().slice(0,10) + ".json";
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+              showToast('数据已导出', 'success');
+            } else {
+              showToast('没有数据可导出', 'info');
+            }
+          } catch (error) {
+            showToast('导出数据时发生错误', 'error');
+          }
+        });
+    }
 
     // 实时显示系统时间和时区
     async function showSystemTime() {
+
       try {
         // 获取后台配置的时区
         const response = await fetch('/api/config');
         const config = await response.json();
         globalTimezone = config.TIMEZONE || 'UTC';
-        
+
         // 格式化当前时间
         function formatTime(dt, tz) {
           return dt.toLocaleString('zh-CN', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -3032,7 +3104,7 @@ const lunarBiz = {
             const target = Date.UTC(get('year'), get('month') - 1, get('day'), get('hour'), get('minute'), get('second'));
             const utc = now.getTime();
             const offset = Math.round((target - utc) / (1000 * 60 * 60));
-            
+
             // 时区中文名称映射
             const timezoneNames = {
               'UTC': '世界标准时间',
@@ -3054,7 +3126,7 @@ const lunarBiz = {
               'Australia/Melbourne': '墨尔本时间',
               'Pacific/Auckland': '奥克兰时间'
             };
-            
+
             const offsetStr = offset >= 0 ? '+' + offset : offset;
             const timezoneName = timezoneNames[tz] || tz;
             return timezoneName + ' (UTC' + offsetStr + ')';
@@ -3075,14 +3147,14 @@ const lunarBiz = {
         update();
         // 每秒刷新
         setInterval(update, 1000);
-        
+
         // 定期检查时区变化并重新加载订阅列表（每30秒检查一次）
         setInterval(async () => {
           try {
             const response = await fetch('/api/config');
             const config = await response.json();
             const newTimezone = config.TIMEZONE || 'UTC';
-            
+
             if (globalTimezone !== newTimezone) {
               globalTimezone = newTimezone;
               console.log('时区已更新为:', globalTimezone);
@@ -3093,7 +3165,7 @@ const lunarBiz = {
             console.error('检查时区更新失败:', error);
           }
         }, 30000);
-        
+
         // 初始加载订阅列表
         loadSubscriptions();
       } catch (e) {
@@ -3124,7 +3196,7 @@ const configPage = `
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
     .btn-secondary { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); transition: all 0.3s; }
     .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
-    
+
     .toast {
       position: fixed; top: 20px; right: 20px; padding: 12px 20px; border-radius: 8px;
       color: white; font-weight: 500; z-index: 1000; transform: translateX(400px);
@@ -3135,20 +3207,20 @@ const configPage = `
     .toast.error { background-color: #ef4444; }
     .toast.info { background-color: #3b82f6; }
     .toast.warning { background-color: #f59e0b; }
-    
-    .config-section { 
-      border: 1px solid #e5e7eb; 
-      border-radius: 8px; 
-      padding: 16px; 
-      margin-bottom: 24px; 
+
+    .config-section {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
     }
-    .config-section.active { 
-      background-color: #f8fafc; 
-      border-color: #6366f1; 
+    .config-section.active {
+      background-color: #f8fafc;
+      border-color: #6366f1;
     }
-    .config-section.inactive { 
-      background-color: #f9fafb; 
-      opacity: 0.7; 
+    .config-section.inactive {
+      background-color: #f9fafb;
+      opacity: 0.7;
     }
   </style>
 </head>
@@ -3177,11 +3249,11 @@ const configPage = `
       </div>
     </div>
   </nav>
-  
+
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="bg-white rounded-lg shadow-md p-6">
       <h2 class="text-2xl font-bold text-gray-800 mb-6">系统配置</h2>
-      
+
       <form id="configForm" class="space-y-8">
         <div class="border-b border-gray-200 pb-6">
           <h3 class="text-lg font-medium text-gray-900 mb-4">管理员账户</h3>
@@ -3197,11 +3269,11 @@ const configPage = `
             </div>
           </div>
         </div>
-        
+
         <div class="border-b border-gray-200 pb-6">
           <h3 class="text-lg font-medium text-gray-900 mb-4">显示设置</h3>
-          
-          
+
+
           <div class="mb-6">
             <label class="inline-flex items-center">
               <input type="checkbox" id="showLunarGlobal" class="form-checkbox h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" checked>
@@ -3240,7 +3312,7 @@ const configPage = `
           </div>
         </div>
 
-        
+
         <div class="border-b border-gray-200 pb-6">
           <h3 class="text-lg font-medium text-gray-900 mb-4">通知设置</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -3314,7 +3386,7 @@ const configPage = `
             </div>
             <p class="mt-1 text-sm text-gray-500">调用 /api/notify/{token} 接口时需携带此令牌；留空表示禁用第三方 API 推送。</p>
           </div>
-          
+
           <div id="telegramConfig" class="config-section">
             <h4 class="text-md font-medium text-gray-900 mb-3">Telegram 配置</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -3333,7 +3405,7 @@ const configPage = `
               </button>
             </div>
           </div>
-          
+
           <div id="notifyxConfig" class="config-section">
             <h4 class="text-md font-medium text-gray-900 mb-3">NotifyX 配置</h4>
             <div class="mb-4">
@@ -3493,13 +3565,13 @@ const configPage = `
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
       toast.className = 'toast ' + type;
-      
+
       const icon = type === 'success' ? 'check-circle' :
                    type === 'error' ? 'exclamation-circle' :
                    type === 'warning' ? 'exclamation-triangle' : 'info-circle';
-      
+
       toast.innerHTML = '<div class="flex items-center"><i class="fas fa-' + icon + ' mr-2"></i><span>' + message + '</span></div>';
-      
+
       container.appendChild(toast);
       setTimeout(() => toast.classList.add('show'), 100);
       setTimeout(() => {
@@ -3543,7 +3615,7 @@ const configPage = `
           const hours = Array.isArray(config.NOTIFICATION_HOURS) ? config.NOTIFICATION_HOURS : [];
           notificationHoursInput.value = hours.join(', ');
         }
-        
+
         // 加载农历显示设置
         document.getElementById('showLunarGlobal').checked = config.SHOW_LUNAR === true;
 
@@ -3562,11 +3634,11 @@ const configPage = `
         showToast('加载配置失败，请刷新页面重试', 'error');
       }
     }
-    
+
     // 动态生成时区选项
     function generateTimezoneOptions(selectedTimezone = 'UTC') {
       const timezoneSelect = document.getElementById('timezone');
-      
+
       const timezones = [
         { value: 'UTC', name: '世界标准时间', offset: '+0' },
         { value: 'Asia/Shanghai', name: '中国标准时间', offset: '+8' },
@@ -3587,10 +3659,10 @@ const configPage = `
         { value: 'Australia/Melbourne', name: '墨尔本时间', offset: '+10' },
         { value: 'Pacific/Auckland', name: '奥克兰时间', offset: '+12' }
       ];
-      
+
       // 清空现有选项
       timezoneSelect.innerHTML = '';
-      
+
       // 添加新选项
       timezones.forEach(tz => {
         const option = document.createElement('option');
@@ -3598,11 +3670,11 @@ const configPage = `
         option.textContent = tz.name + '（UTC' + tz.offset + '）';
         timezoneSelect.appendChild(option);
       });
-      
+
       // 设置选中的时区
       timezoneSelect.value = selectedTimezone;
     }
-    
+
     function toggleNotificationConfigs(enabledNotifiers) {
       const telegramConfig = document.getElementById('telegramConfig');
       const notifyxConfig = document.getElementById('notifyxConfig');
@@ -3648,7 +3720,7 @@ const configPage = `
         toggleNotificationConfigs(enabledNotifiers);
       });
     });
-    
+
     document.getElementById('configForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -3719,14 +3791,14 @@ const configPage = `
         if (result.success) {
           showToast('配置保存成功', 'success');
           passwordField.value = '';
-          
+
           // 更新全局时区并重新显示时间
           globalTimezone = config.TIMEZONE;
           showSystemTime();
-          
+
           // 标记时区已更新，供其他页面检测
           localStorage.setItem('timezoneUpdated', Date.now().toString());
-          
+
           // 如果当前在订阅列表页面，则自动刷新页面以更新时区显示
           if (window.location.pathname === '/admin') {
             window.location.reload();
@@ -3742,7 +3814,7 @@ const configPage = `
         submitButton.disabled = false;
       }
     });
-    
+
     async function testNotification(type) {
       const buttonId = type === 'telegram' ? 'testTelegramBtn' :
                       type === 'notifyx' ? 'testNotifyXBtn' :
@@ -3851,11 +3923,11 @@ const configPage = `
         button.disabled = false;
       }
     }
-    
+
     document.getElementById('testTelegramBtn').addEventListener('click', () => {
       testNotification('telegram');
     });
-    
+
     document.getElementById('testNotifyXBtn').addEventListener('click', () => {
       testNotification('notifyx');
     });
@@ -3894,10 +3966,10 @@ const configPage = `
     });
 
     window.addEventListener('load', loadConfig);
-    
+
     // 全局时区配置
     let globalTimezone = 'UTC';
-    
+
     // 实时显示系统时间和时区
     async function showSystemTime() {
       try {
@@ -3905,7 +3977,7 @@ const configPage = `
         const response = await fetch('/api/config');
         const config = await response.json();
         globalTimezone = config.TIMEZONE || 'UTC';
-        
+
         // 格式化当前时间
         function formatTime(dt, tz) {
           return dt.toLocaleString('zh-CN', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -3925,7 +3997,7 @@ const configPage = `
             const target = Date.UTC(get('year'), get('month') - 1, get('day'), get('hour'), get('minute'), get('second'));
             const utc = now.getTime();
             const offset = Math.round((target - utc) / (1000 * 60 * 60));
-            
+
             // 时区中文名称映射
             const timezoneNames = {
               'UTC': '世界标准时间',
@@ -3947,7 +4019,7 @@ const configPage = `
               'Australia/Melbourne': '墨尔本时间',
               'Pacific/Auckland': '奥克兰时间'
             };
-            
+
             const offsetStr = offset >= 0 ? '+' + offset : offset;
             const timezoneName = timezoneNames[tz] || tz;
             return timezoneName + ' (UTC' + offsetStr + ')';
@@ -3968,14 +4040,14 @@ const configPage = `
         update();
         // 每秒刷新
         setInterval(update, 1000);
-        
+
         // 定期检查时区变化并重新加载订阅列表（每30秒检查一次）
         setInterval(async () => {
           try {
             const response = await fetch('/api/config');
             const config = await response.json();
             const newTimezone = config.TIMEZONE || 'UTC';
-            
+
             if (globalTimezone !== newTimezone) {
               globalTimezone = newTimezone;
               console.log('时区已更新为:', globalTimezone);
@@ -4073,6 +4145,49 @@ const admin = {
   }
 };
 
+async function handleImport(request, env) {
+  if (request.method !== 'POST') {
+    return new Response(JSON.stringify({ success: false, message: 'Method not allowed' }), {
+      status: 405,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  try {
+    const subscriptionsToImport = await request.json();
+    if (!Array.isArray(subscriptionsToImport)) {
+      return new Response(JSON.stringify({ success: false, message: 'Invalid data format' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    let importedCount = 0;
+    const existingSubscriptions = await getAllSubscriptions(env);
+    const subscriptionsById = new Map(existingSubscriptions.map(s => [s.id, s]));
+
+    for (const sub of subscriptionsToImport) {
+      if (sub.id && sub.name) { // Basic validation
+        subscriptionsById.set(sub.id, sub);
+        importedCount++;
+      }
+    }
+
+    const newSubscriptions = Array.from(subscriptionsById.values());
+    await env.SUBSCRIPTIONS_KV.put('subscriptions', JSON.stringify(newSubscriptions));
+
+    return new Response(JSON.stringify({ success: true, importedCount }), {
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+  } catch (error) {
+    return new Response(JSON.stringify({ success: false, message: error.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+}
+
 // 处理API请求
 const api = {
   async handleRequest(request, env, ctx) {
@@ -4118,11 +4233,15 @@ const api = {
     const token = getCookieValue(request.headers.get('Cookie'), 'token');
     const user = token ? await verifyJWT(token, config.JWT_SECRET) : null;
 
-    if (!user && path !== '/login') {
+    if (!user && path !== '/login' && !path.startsWith('/notify/')) {
       return new Response(
         JSON.stringify({ success: false, message: '未授权访问' }),
         { status: 401, headers: { 'Content-Type': 'application/json' } }
       );
+    }
+
+    if (path === '/import' && method === 'POST') {
+      return handleImport(request, env);
     }
 
     if (path === '/config') {
@@ -4644,7 +4763,7 @@ async function createSubscription(subscription, env) {
     const config = await getConfig(env);
     const timezone = config?.TIMEZONE || 'UTC';
     const currentTime = getCurrentTimeInTimezone(timezone);
-    
+
 
     let useLunar = !!subscription.useLunar;
     if (useLunar) {
@@ -4653,7 +4772,7 @@ async function createSubscription(subscription, env) {
         expiryDate.getMonth() + 1,
         expiryDate.getDate()
       );
-      
+
       if (lunar && subscription.periodValue && subscription.periodUnit) {
         // 如果到期日<=今天，自动推算到下一个周期
         while (expiryDate <= currentTime) {
@@ -4678,8 +4797,6 @@ async function createSubscription(subscription, env) {
       }
     }
 
-    const reminderSetting = resolveReminderSetting(subscription);
-
     const newSubscription = {
       id: Date.now().toString(), // 前端使用本地时间戳
       name: subscription.name,
@@ -4689,10 +4806,8 @@ async function createSubscription(subscription, env) {
       expiryDate: subscription.expiryDate,
       periodValue: subscription.periodValue || 1,
       periodUnit: subscription.periodUnit || 'month',
-      reminderUnit: reminderSetting.unit,
-      reminderValue: reminderSetting.value,
-      reminderDays: reminderSetting.unit === 'day' ? reminderSetting.value : undefined,
-      reminderHours: reminderSetting.unit === 'hour' ? reminderSetting.value : undefined,
+      reminderUnit: subscription.reminderUnit,
+      reminderValues: subscription.reminderValues,
       notes: subscription.notes || '',
       isActive: subscription.isActive !== false,
       autoRenew: subscription.autoRenew !== false,
@@ -4764,14 +4879,6 @@ if (useLunar) {
       }
     }
 
-    const reminderSource = {
-      reminderUnit: subscription.reminderUnit !== undefined ? subscription.reminderUnit : subscriptions[index].reminderUnit,
-      reminderValue: subscription.reminderValue !== undefined ? subscription.reminderValue : subscriptions[index].reminderValue,
-      reminderHours: subscription.reminderHours !== undefined ? subscription.reminderHours : subscriptions[index].reminderHours,
-      reminderDays: subscription.reminderDays !== undefined ? subscription.reminderDays : subscriptions[index].reminderDays
-    };
-    const reminderSetting = resolveReminderSetting(reminderSource);
-
     subscriptions[index] = {
       ...subscriptions[index],
       name: subscription.name,
@@ -4781,10 +4888,8 @@ if (useLunar) {
       expiryDate: subscription.expiryDate,
       periodValue: subscription.periodValue || subscriptions[index].periodValue || 1,
       periodUnit: subscription.periodUnit || subscriptions[index].periodUnit || 'month',
-      reminderUnit: reminderSetting.unit,
-      reminderValue: reminderSetting.value,
-      reminderDays: reminderSetting.unit === 'day' ? reminderSetting.value : undefined,
-      reminderHours: reminderSetting.unit === 'hour' ? reminderSetting.value : undefined,
+      reminderUnit: subscription.reminderUnit,
+      reminderValues: subscription.reminderValues,
       notes: subscription.notes || '',
       isActive: subscription.isActive !== undefined ? subscription.isActive : subscriptions[index].isActive,
       autoRenew: subscription.autoRenew !== undefined ? subscription.autoRenew : (subscriptions[index].autoRenew !== undefined ? subscriptions[index].autoRenew : true),
@@ -4865,11 +4970,11 @@ async function testSingleSubscriptionNotification(id, env) {
     const timezone = config?.TIMEZONE || 'UTC';
     const formattedExpiryDate = formatTimeInTimezone(new Date(subscription.expiryDate), timezone, 'date');
     const currentTime = formatTimeInTimezone(new Date(), timezone, 'datetime');
-    
+
     // 获取日历类型和自动续期状态
     const calendarType = subscription.useLunar ? '农历' : '公历';
     const autoRenewText = subscription.autoRenew ? '是' : '否';
-    
+
     const commonContent = `**订阅详情**
 类型: ${subscription.customType || '其他'}
 日历类型: ${calendarType}
@@ -5091,49 +5196,25 @@ async function sendWechatBotNotification(title, content, config) {
 
 // 优化通知内容格式
 function resolveReminderSetting(subscription) {
-  const defaultDays = subscription && subscription.reminderDays !== undefined ? Number(subscription.reminderDays) : 7;
-  let unit = subscription && subscription.reminderUnit === 'hour' ? 'hour' : 'day';
+  const reminderValues = Array.isArray(subscription.reminderValues) && subscription.reminderValues.length > 0
+    ? subscription.reminderValues.map(Number)
+    : (subscription.reminderValue !== undefined ? [Number(subscription.reminderValue)] : (subscription.reminderDays !== undefined ? [Number(subscription.reminderDays)] : [7, 0]));
 
-  let value;
-  if (unit === 'hour') {
-    if (subscription && subscription.reminderValue !== undefined && subscription.reminderValue !== null && !isNaN(Number(subscription.reminderValue))) {
-      value = Number(subscription.reminderValue);
-    } else if (subscription && subscription.reminderHours !== undefined && subscription.reminderHours !== null && !isNaN(Number(subscription.reminderHours))) {
-      value = Number(subscription.reminderHours);
-    } else {
-      value = 0;
-    }
-  } else {
-    if (subscription && subscription.reminderValue !== undefined && subscription.reminderValue !== null && !isNaN(Number(subscription.reminderValue))) {
-      value = Number(subscription.reminderValue);
-    } else if (!isNaN(defaultDays)) {
-      value = Number(defaultDays);
-    } else {
-      value = 7;
-    }
-  }
+  let unit = (subscription && subscription.reminderUnit === 'hour') ? 'hour' : 'day';
 
-  if (value < 0 || isNaN(value)) {
-    value = 0;
-  }
+  const values = [...new Set(reminderValues)].filter(v => !isNaN(v) && v >= 0).sort((a, b) => b - a);
 
-  return { unit, value };
+  return { unit, values };
 }
 
 function shouldTriggerReminder(reminder, daysDiff, hoursDiff) {
-  if (!reminder) {
+  if (!reminder || !reminder.values) {
     return false;
   }
   if (reminder.unit === 'hour') {
-    if (reminder.value === 0) {
-      return hoursDiff >= 0 && hoursDiff < 1;
-    }
-    return hoursDiff >= 0 && hoursDiff <= reminder.value;
+    return hoursDiff >= 0 && reminder.values.includes(Math.round(hoursDiff));
   }
-  if (reminder.value === 0) {
-    return daysDiff === 0;
-  }
-  return daysDiff >= 0 && daysDiff <= reminder.value;
+  return daysDiff >= 0 && reminder.values.includes(daysDiff);
 }
 
 function formatNotificationContent(subscriptions, config) {
@@ -5150,7 +5231,7 @@ function formatNotificationContent(subscriptions, config) {
     // 格式化到期日期（使用所选时区）
     const expiryDateObj = new Date(sub.expiryDate);
     const formattedExpiryDate = formatTimeInTimezone(expiryDateObj, timezone, 'date');
-    
+
     // 农历日期
     let lunarExpiryText = '';
     if (showLunar) {
@@ -5173,17 +5254,17 @@ function formatNotificationContent(subscriptions, config) {
       statusText = `将在 ${sub.daysRemaining} 天后到期`;
     }
 
-    const reminderSuffix = reminderSetting.value === 0
-      ? '（仅到期时提醒）'
+    const reminderSuffix = reminderSetting.values.includes(0)
+      ? '（包含到期当天提醒）'
       : (reminderSetting.unit === 'hour' ? '（小时级提醒）' : '');
     const reminderText = reminderSetting.unit === 'hour'
-      ? `提醒策略: 提前 ${reminderSetting.value} 小时${reminderSuffix}`
-      : `提醒策略: 提前 ${reminderSetting.value} 天${reminderSuffix}`;
+      ? `提醒策略: 提前 ${reminderSetting.values.join(', ')} 小时${reminderSuffix}`
+      : `提醒策略: 提前 ${reminderSetting.values.join(', ')} 天${reminderSuffix}`;
 
     // 获取日历类型和自动续期状态
     const calendarType = sub.useLunar ? '农历' : '公历';
     const autoRenewText = sub.autoRenew ? '是' : '否';
-    
+
     // 构建格式化的通知内容
     const subscriptionContent = `${statusEmoji} **${sub.name}**
 类型: ${typeText} ${periodText}
@@ -5195,8 +5276,8 @@ ${reminderText}
 到期状态: ${statusText}`;
 
     // 添加备注
-    let finalContent = sub.notes ? 
-      subscriptionContent + `\n备注: ${sub.notes}` : 
+    let finalContent = sub.notes ?
+      subscriptionContent + `\n备注: ${sub.notes}` :
       subscriptionContent;
 
     content += finalContent + '\n\n';
@@ -5343,7 +5424,7 @@ async function sendBarkNotification(title, content, config) {
 
     const result = await response.json();
     console.log('[Bark] 发送结果:', result);
-    
+
     // Bark API返回code为200表示成功
     return result.code === 200;
   } catch (error) {
@@ -5489,7 +5570,7 @@ for (const subscription of subscriptions) {
     const solar = lunarBiz.lunar2solar(lunar);
     const lunarDate = new Date(solar.year, solar.month - 1, solar.day);
     const lunarMidnight = getTimezoneMidnightTimestamp(lunarDate, timezone);
-    
+
     daysDiff = Math.round((lunarMidnight - currentMidnight) / MS_PER_DAY);
 
     console.log('[定时任务] 订阅 "' + subscription.name + '" 到期日期: ' + expiryDate.toISOString() + ', 农历转换后午夜时间: ' + new Date(lunarMidnight).toISOString() + ', 剩余天数: ' + daysDiff);
