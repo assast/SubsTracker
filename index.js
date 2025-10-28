@@ -890,10 +890,7 @@ const adminPage = `
           </div>
         </div>
         <div class="flex items-center space-x-3 lg:space-x-4">
-        <label class="lunar-toggle">
-          <input type="checkbox" id="listShowLunar" class="form-checkbox h-4 w-4 text-indigo-600 shrink-0">
-          <span class="text-gray-700">显示农历</span>
-        </label>
+
         <button id="importBtn" class="btn-warning text-white px-4 py-2 rounded-md text-sm font-medium flex items-center shrink-0">
           <i class="fas fa-upload mr-2"></i>导入
         </button>
@@ -980,10 +977,7 @@ const adminPage = `
         </div>
 
         <div class="mb-4 flex items-center space-x-6">
-          <label class="lunar-toggle">
-            <input type="checkbox" id="showLunar" class="form-checkbox h-4 w-4 text-indigo-600">
-            <span class="text-gray-700">显示农历日期</span>
-          </label>
+
           <label class="lunar-toggle">
             <input type="checkbox" id="useLunar" class="form-checkbox h-4 w-4 text-indigo-600">
             <span class="text-gray-700">周期按农历</span>
@@ -1519,13 +1513,13 @@ const lunarBiz = {
     function updateLunarDisplay(dateInputId, lunarDisplayId) {
       const dateInput = document.getElementById(dateInputId);
       const lunarDisplay = document.getElementById(lunarDisplayId);
-      const showLunar = document.getElementById('showLunar');
+      const useLunar = document.getElementById('useLunar');
 
       if (!dateInput || !lunarDisplay) {
         return;
       }
 
-      if (!dateInput.value || !showLunar || !showLunar.checked) {
+      if (!dateInput.value || !useLunar || !useLunar.checked) {
         lunarDisplay.classList.remove('show');
         return;
       }
@@ -1825,8 +1819,6 @@ const lunarBiz = {
         return;
       }
 
-      const listShowLunar = document.getElementById('listShowLunar');
-      const showLunar = listShowLunar ? listShowLunar.checked : false;
       const searchInput = document.getElementById('searchKeyword');
       const keyword = searchInput ? searchInput.value.trim().toLowerCase() : '';
       const categorySelect = document.getElementById('categoryFilter');
@@ -1922,7 +1914,7 @@ const lunarBiz = {
 
         let lunarExpiryText = '';
         let startLunarText = '';
-        if (showLunar) {
+        if (subscription.useLunar) {
           const expiryDateObj = new Date(subscription.expiryDate);
           const lunarExpiry = lunarCalendar.solar2lunar(expiryDateObj.getFullYear(), expiryDateObj.getMonth() + 1, expiryDateObj.getDate());
           lunarExpiryText = lunarExpiry ? lunarExpiry.fullStr : '';
